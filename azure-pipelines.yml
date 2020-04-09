@@ -119,7 +119,7 @@ stages:
             inputs:
               azureSubscription: 'LSG-Tailspin-SpaceGame'
               appName: '$(WebAppNameDev)'
-              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/Tailspin.SpaceGame.Web.zip'
 
 - stage: 'DeployToTest'
   displayName: 'Deploy to the test environment'
@@ -143,4 +143,4 @@ stages:
             inputs:
               azureSubscription: 'LSG-Tailspin-SpaceGame'
               appName: '$(WebAppNameTest)'
-              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/Tailspin.SpaceGame.Web.zip'
