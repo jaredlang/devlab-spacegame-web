@@ -25,6 +25,19 @@ namespace Tests
             }
         }
 
+        [TestCase("1", ExpectedResult = "1")]
+        public string FetchGameRegionById(string id)
+        {
+            // Fetch the scores.
+            Task<Score> scoresTask = _scoreRepository.GetItemAsync(
+                id // item Id
+            );
+            Score score = scoresTask.Result;
+
+            // Verify that we received the specified number of items.
+            return score.Id;
+        }
+
         [TestCase("Milky Way")]
         [TestCase("Andromeda")]
         [TestCase("Pinwheel")]
