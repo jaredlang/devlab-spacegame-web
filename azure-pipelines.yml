@@ -201,7 +201,7 @@ stages:
   condition: |
     and 
     (
-      succeeded(DBAVerificationApply),
+      succeeded('DBAVerificationApply'),
       eq(variables['Build.SourceBranchName'], variables['releaseBranchName'])
     )
   jobs:
