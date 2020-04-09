@@ -12,50 +12,44 @@ namespace Tests
 {
     public class DocumentDBRepository_GetItemsAsyncShould
     {
-        private IDocumentDBRepository<Score> _scoreRepository;
+        private IDocumentDBRepository _scoreRepository;
 
         [SetUp]
         public void Setup()
         {
-            using (Stream scoresData = typeof(IDocumentDBRepository<Score>)
-                .Assembly
-                .GetManifestResourceStream("Tailspin.SpaceGame.Web.SampleData.scores.json"))
-            {
-                _scoreRepository = new LocalDocumentDBRepository<Score>(scoresData);
-            }
+            _scoreRepository = new LocalDocumentDBRepository(
+                "SampleData/scores.json",
+                "SampleData/profiles.json"
+                ); 
         }
 
         [TestCase("1", ExpectedResult = "1")]
         public string FetchGameRegionById(string id)
         {
             // Fetch the scores.
-            Task<Score> scoresTask = _scoreRepository.GetItemAsync(
+            Task<Profile> profileTask = _scoreRepository.GetProfileAsync(
                 id // item Id
             );
-            Score score = scoresTask.Result;
+            Profile profile = profileTask.Result;
 
             // Verify that we received the specified number of items.
-            return score.Id;
+            return profile.Id;
         }
 
-        [TestCase("Milky Way")]
-        [TestCase("Andromeda")]
-        [TestCase("Pinwheel")]
-        [TestCase("NGC 1300")]
-        [TestCase("Messier 82")]
-        public void FetchOnlyRequestedGameRegion(string gameRegion)
+        [TestCase("", "Milky Way")]
+        [TestCase("", "Andromeda")]
+        [TestCase("", "Pinwheel")]
+        [TestCase("", "NGC 1300")]
+        [TestCase("", "Messier 82")]
+        public void FetchOnlyRequestedGameRegion(string gameMode, string gameRegion)
         {
             const int PAGE = 0; // take the first page of results
             const int MAX_RESULTS = 10; // sample up to 10 results
 
-            // Form the query predicate.
-            // This expression selects all scores for the provided game region.
-            Expression<Func<Score, bool>> queryPredicate = score => (score.GameRegion == gameRegion);
-
             // Fetch the scores.
-            Task<IEnumerable<Score>> scoresTask = _scoreRepository.GetItemsAsync(
-                queryPredicate, // the predicate defined above
-                score => 1, // we don't care about the order
+            Task<IEnumerable<Score>> scoresTask = _scoreRepository.GetScoresAsync(
+                gameMode, 
+                gameRegion, 
                 PAGE,
                 MAX_RESULTS
             );
@@ -65,34 +59,36 @@ namespace Tests
             Assert.That(scores, Is.All.Matches<Score>(score => score.GameRegion == gameRegion));
         }
 
-        [TestCase("NoSuchRegion")]
-        public void FetchNonExistentGameRegion(string gameRegion) 
+        [TestCase("", "NoSuchRegion")]
+        public void FetchNonExistentGameRegion(string gameMode, string gameRegion) 
         {
-            // Form the query predicate.
-            // This expression selects all scores for the provided game region.
-            Expression<Func<Score, bool>> queryPredicate = score => (score.GameRegion == gameRegion);
+            const int PAGE = 0; // take the first page of results
+            const int MAX_RESULTS = 10; // sample up to 10 results
 
-            // Fetch the count.
-            Task<int> countTask = _scoreRepository.CountItemsAsync(
-                queryPredicate // the predicate defined above
+            // Fetch the scores.
+            Task<IEnumerable<Score>> scoresTask = _scoreRepository.GetScoresAsync(
+                gameMode,
+                gameRegion,
+                PAGE,
+                MAX_RESULTS
             );
-            int count = countTask.Result;
+            IEnumerable<Score> scores = scoresTask.Result;
 
             // Verify that zero score in the non-existent game region.
-            Assert.True(count == 0);            
+            Assert.True(scores.Count() == 0);            
         }
 
-        [TestCase(0, ExpectedResult=0)]
-        [TestCase(1, ExpectedResult=1)]
-        [TestCase(10, ExpectedResult=10)]
-        public int ReturnRequestedCount(int count)
+        [TestCase("", "Milky Way", 0, ExpectedResult=0)]
+        [TestCase("", "Andromeda", 1, ExpectedResult=1)]
+        [TestCase("", "Pinwheel",  2, ExpectedResult=2)]
+        public int ReturnRequestedCount(string gameMode, string gameRegion, int count)
         {
             const int PAGE = 0; // take the first page of results
 
             // Fetch the scores.
-            Task<IEnumerable<Score>> scoresTask = _scoreRepository.GetItemsAsync(
-                score => true, // return all scores
-                score => 1, // we don't care about the order
+            Task<IEnumerable<Score>> scoresTask = _scoreRepository.GetScoresAsync(
+                gameMode,
+                gameRegion,
                 PAGE,
                 count // fetch this number of results
             );
