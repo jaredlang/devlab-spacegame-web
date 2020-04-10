@@ -385,8 +385,8 @@ stages:
       displayName: 'Install Apache JMeter'
     - script: apache-jmeter-$(jmeterVersion)/bin/./jmeter -n -t $(perfTestDirectory)/LoadTest.jmx -o Results.xml -Jhostname=$(HostNameStaging)
       displayName: 'Run Load tests'
-    - script: cat Results.xml
-      displayName: 'Display the Load test results'
+    - script: ls -l Results.xml
+      displayName: 'List the Load test results file'
     - script: |
         sudo apt-get update
         sudo apt-get install xsltproc
