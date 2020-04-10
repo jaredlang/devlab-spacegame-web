@@ -290,6 +290,7 @@ stages:
 - stage: 'DeployToTest'
   displayName: 'Deploy to the test environment'
   dependsOn: DeployToDev
+  condition: succeeded('DeployToDev')
   # condition: eq(variables['Build.Reason'], 'Schedule')
   jobs:
   - deployment: Deploy
