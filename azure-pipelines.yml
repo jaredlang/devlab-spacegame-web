@@ -77,6 +77,7 @@ stages:
         projects: '**/*.Tests.csproj'
         arguments: '--no-build --configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
         publishTestResults: true
+        testRunTile: 'Unit Tests'
 
     - script: |
         reportgenerator -reports:$(Build.SourcesDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines
@@ -340,8 +341,9 @@ stages:
       inputs:
         command: 'test'
         arguments: '--no-build --configuration $(buildConfiguration)'
-        publishTestResults: true
         projects: '$(System.DefaultWorkingDirectory)/**/*UITests.csproj'
+        publishTestResults: true
+        testRunTitle: 'UI Tests'
 
 - stage: 'DeployToStaging'
   displayName: 'Deploy to the staging environment'
@@ -396,3 +398,4 @@ stages:
       inputs:
         testResultsFormat: JUnit
         testResultsFiles: JUnit.xml
+        testRunTitle: 'Load Tests'
