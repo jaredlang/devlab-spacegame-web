@@ -374,8 +374,8 @@ stages:
     pool:
       vmImage: 'ubuntu-16.04'
     variables:
-    - jmeterVersion: '5.2.1'
-    - perfTestDirectory: './Tailspin.SpaceGame.Web.PerfTests'
+      jmeterVersion: '5.2.1'
+      perfTestDirectory: './Tailspin.SpaceGame.Web.PerfTests'
     steps: 
     - script: |
         wget -c ftp.ps.pl/pub/apache/jmeter/binaries/apache-jmeter-$(jmeterVersion).tgz
