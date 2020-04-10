@@ -1,4 +1,6 @@
 
+[![Build Status](https://dev.azure.com/logicsolutionsgroup/devlab-spacegame-web/_apis/build/status/devlab-spacegame-web?branchName=master)](https://dev.azure.com/logicsolutionsgroup/devlab-spacegame-web/_build/latest?definitionId=16&branchName=master)
+
 # Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
