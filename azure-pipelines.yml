@@ -368,3 +368,27 @@ stages:
               azureSubscription: 'LSG-Tailspin-SpaceGame'
               appName: '$(WebAppNameStaging)'
               package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/Tailspin.SpaceGame.Web.zip'  
+  - job: RunLoadTests
+    dependsOn: Deploy
+    displayName: 'Run load tests'
+    pool:
+      vmImage: 'ubuntu-16.04'
+    variables:
+    - jmeterVersion: '5.2.1'
+    - perfTestDirectory: './Tailspin.SpaceGame.Web.PerfTests'
+    steps: 
+    - script: |
+        wget -c ftp.ps.pl/pub/apache/jmeter/binaries/apache-jmeter-$(jmeterVersion).tgz
+        tar -xf apache-jmeter-$(jmeterVersion).tgz
+      displayName: 'Install Apache JMeter'
+    - script: apache-jmeter-$(jmeterVersion)/bin/./jmeter -n -t $(perfTestDirectory)/LoadTest.jmx -o $(perfTestDirectory)/Results.xml -Jhostname=$(StagingSiteURL)
+      displayName: 'Run Load tests'
+    - script: |
+        sudo apt-get update
+        sudo apt-get install xsltproc
+        xsltproc $(perfTestDirectory)/JMeter2JUnit.xsl $(perfTestDirectory)/Results.xml > $(perfTestDirectory)/JUnit.xml
+      displayName: 'Transform JMeter output to JUnit'
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFormat: JUnit
+        testResultsFiles: $(perfTestDirectory)/JUnit.xml
