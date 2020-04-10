@@ -349,13 +349,13 @@ stages:
   displayName: 'Deploy to the staging environment'
   dependsOn: DeployToTest
   condition: succeeded('DeployToTest')
+  variables:
+  - group: Release
   jobs:
   - deployment: Deploy
     pool:
       vmImage: 'ubuntu-16.04'
     environment: staging
-    variables:
-    - group: Release
     strategy:
       runOnce:
         deploy:
