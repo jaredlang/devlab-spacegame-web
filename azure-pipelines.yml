@@ -383,16 +383,16 @@ stages:
         wget -c ftp.ps.pl/pub/apache/jmeter/binaries/apache-jmeter-$(jmeterVersion).tgz
         tar -xf apache-jmeter-$(jmeterVersion).tgz
       displayName: 'Install Apache JMeter'
-    - script: apache-jmeter-$(jmeterVersion)/bin/./jmeter -n -t $(perfTestDirectory)/LoadTest.jmx -o $(perfTestDirectory)/Results.xml -Jhostname=$(HostNameStaging)
+    - script: apache-jmeter-$(jmeterVersion)/bin/./jmeter -n -t $(perfTestDirectory)/LoadTest.jmx -o LoadResults.xml -Jhostname=$(HostNameStaging)
       displayName: 'Run Load tests'
-    - script: cat $(perfTestDirectory)/Results.xml
+    - script: cat LoadResults.xml
       displayName: 'Display the Load test results'
     - script: |
         sudo apt-get update
         sudo apt-get install xsltproc
-        xsltproc $(perfTestDirectory)/JMeter2JUnit.xsl $(perfTestDirectory)/Results.xml > $(perfTestDirectory)/JUnit.xml
+        xsltproc $(perfTestDirectory)/JMeter2JUnit.xsl LoadResults.xml > JUnit.xml
       displayName: 'Transform JMeter output to JUnit'
     - task: PublishTestResults@2
       inputs:
         testResultsFormat: JUnit
-        testResultsFiles: $(perfTestDirectory)/JUnit.xml
+        testResultsFiles: JUnit.xml
