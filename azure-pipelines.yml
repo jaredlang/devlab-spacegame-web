@@ -1,9 +1,18 @@
 trigger:
-- '*'
+  batch: true
+  branches:
+    include:
+    - master
+    - releases/*
+    exclude:
+    - experiments/*
+  paths:
+    exclude:
+    - README.md
+    - LICENSE*
 
 variables:
   buildConfiguration: 'Release'
-  releaseBranchName: 'master'
   
 stages:
 - stage: 'Build'
@@ -264,8 +273,7 @@ stages:
     and 
     (
       succeeded('DBAVerificationScript'),
-      in(dependencies.DBAVerificationApply.result, 'Succeeded', 'Skipped'),
-      eq(variables['Build.SourceBranchName'], variables['releaseBranchName'])
+      in(dependencies.DBAVerificationApply.result, 'Succeeded', 'Skipped')
     )
   jobs:
   - deployment: Deploy
