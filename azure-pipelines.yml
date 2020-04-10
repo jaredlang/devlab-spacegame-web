@@ -300,13 +300,13 @@ stages:
   dependsOn: DeployToDev
   condition: succeeded('DeployToDev')
   # condition: eq(variables['Build.Reason'], 'Schedule')
+  variables:
+  - group: Release
   jobs:
   - deployment: Deploy
     pool:
       vmImage: 'ubuntu-16.04'
     environment: test
-    variables:
-    - group: Release
     strategy:
       runOnce:
         deploy:
@@ -320,12 +320,10 @@ stages:
               appName: '$(WebAppNameTest)'
               package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/Tailspin.SpaceGame.Web.zip'
   - job: RunUITests
-    dependsOn: Deploy
     displayName: 'Run UI tests'
+    dependsOn: Deploy
     pool:
       vmImage: 'windows-2019'
-    variables:
-    - group: 'Release'
     steps: 
     - task: UseDotNet@2
       displayName: 'Use .NET Core SDK $(dotnetSdkVersion)'
@@ -377,6 +375,10 @@ stages:
       jmeterVersion: '5.2.1'
       perfTestDirectory: '$(System.DefaultWorkingDirectory)/Tailspin.SpaceGame.Web.PerfTests'
     steps: 
+    - script: ls -l $(System.DefaultWorkingDirectory)
+      displayName: 'List the files under $(System.DefaultWorkingDirectory)'
+    - script: cat $(perfTestDirectory)/LoadTest.jmx
+      displayName: 'Display the Load test Settings'
     - script: |
         wget -c ftp.ps.pl/pub/apache/jmeter/binaries/apache-jmeter-$(jmeterVersion).tgz
         tar -xf apache-jmeter-$(jmeterVersion).tgz
@@ -388,7 +390,6 @@ stages:
     - script: |
         sudo apt-get update
         sudo apt-get install xsltproc
-        ls $(perfTestDirectory)
         xsltproc $(perfTestDirectory)/JMeter2JUnit.xsl $(perfTestDirectory)/Results.xml > $(perfTestDirectory)/JUnit.xml
       displayName: 'Transform JMeter output to JUnit'
     - task: PublishTestResults@2
