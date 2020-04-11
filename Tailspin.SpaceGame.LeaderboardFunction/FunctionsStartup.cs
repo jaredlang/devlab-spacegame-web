@@ -18,7 +18,7 @@ namespace TailSpin.SpaceGame.LeaderboardFunction
                     ?? (Environment.GetEnvironmentVariable("HOME") == null
                         ? Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
                         : $"{Environment.GetEnvironmentVariable("HOME")}/site/wwwroot"); // azure_root
-
+            /*
             var configBuilder = new ConfigurationBuilder()
                   .SetFileProvider(new PhysicalFileProvider(actual_root))
                   .AddJsonFile("local.settings.json", optional: false, reloadOnChange: true);
@@ -33,6 +33,10 @@ namespace TailSpin.SpaceGame.LeaderboardFunction
             var appSettingsConfig = configBuilder.Build();
 
             builder.Services.AddSingleton<IDocumentDBRepository>(new RemoteDBRepository(appSettingsConfig));
+            */
+            // 
+            builder.Services.AddSingleton<IDocumentDBRepository>(new LocalDocumentDBRepository(
+                Path.Combine(actual_root, @"SampleData/scores.json"), Path.Combine(actual_root, @"SampleData/profiles.json")));
         }
     }
 }
