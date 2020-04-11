@@ -293,6 +293,7 @@ stages:
 - stage: 'DeployToDev'
   displayName: 'Deploy to the dev environment'
   dependsOn: DeployFunction
+  condition: succeeded('DeployFunction')
   jobs:
   - deployment: Deploy
     pool:
