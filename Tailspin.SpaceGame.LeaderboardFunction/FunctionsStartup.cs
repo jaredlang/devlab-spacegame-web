@@ -21,16 +21,15 @@ namespace TailSpin.SpaceGame.LeaderboardFunction
 
             var configBuilder = new ConfigurationBuilder()
                   .SetFileProvider(new PhysicalFileProvider(actual_root))
-                  .AddJsonFile("local.settings.json",
-                     optional: false,
-                     reloadOnChange: true)
                   .AddEnvironmentVariables();
 
             // if it is a local run, 
             // if (actual_root.Equals(Environment.GetEnvironmentVariable("AzureWebJobsScriptRoot")))
             if ("Development".Equals(Environment.GetEnvironmentVariable("AZURE_FUNCTIONS_ENVIRONMENT"), StringComparison.OrdinalIgnoreCase))
             {
-                configBuilder.AddUserSecrets<Startup>();
+                configBuilder
+                    .AddJsonFile("local.settings.json", optional: false, reloadOnChange: true)
+                    .AddUserSecrets<Startup>();
             }
 
             var appSettingsConfig = configBuilder.Build();
