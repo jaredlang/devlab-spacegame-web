@@ -1,16 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
-using TailSpin.SpaceGame.LeaderboardFunction;
 using TailSpin.SpaceGame.LeaderboardFunction.Models;
 
-namespace Tailspin.SpaceGame.LeaderboardFunction
+namespace TailSpin.SpaceGame.LeaderboardFunction
 {
     public class RemoteDBRepository : IDocumentDBRepository
     {

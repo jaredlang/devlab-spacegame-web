@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TailSpin.SpaceGame.LeaderboardFunction.Models;
 
-namespace Tailspin.SpaceGame.LeaderboardFunction
+namespace TailSpin.SpaceGame.LeaderboardFunction
 {
     public class LeaderboardFunction
     {
