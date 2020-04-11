@@ -5,8 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using TailSpin.SpaceGame.Web;
-using TailSpin.SpaceGame.Web.Models;
+using TailSpin.SpaceGame.LeaderboardFunction;
 
 namespace Tests
 {
@@ -96,6 +95,6 @@ namespace Tests
 
             // Verify that we received the specified number of items.
             return scores.Count();
-        }        
+        }
     }
 }

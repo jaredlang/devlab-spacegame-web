@@ -6,10 +6,15 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tailspin.SpaceGame.Web", "Tailspin.SpaceGame.Web\Tailspin.SpaceGame.Web.csproj", "{A0C4E31E-AC75-4F39-9F59-0AA19D9B8F46}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tailspin.SpaceGame.Web.Tests", "Tailspin.SpaceGame.Web.Tests\Tailspin.SpaceGame.Web.Tests.csproj", "{773BA444-0D67-4F37-8762-17E108CCD5F5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5CA28DAB-1212-43F4-B349-DE8029FA7282} = {5CA28DAB-1212-43F4-B349-DE8029FA7282}
+	EndProjectSection
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Tailspin.SpaceGame.Database", "Tailspin.SpaceGame.Database\Tailspin.SpaceGame.Database.sqlproj", "{8BAA5C4E-F217-4E45-8473-1EBAE2684BFF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tailspin.SpaceGame.Web.UITests", "Tailspin.SpaceGame.Web.UITests\Tailspin.SpaceGame.Web.UITests.csproj", "{EE18CEDD-9780-4AA8-BC34-DC11780AEFF0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tailspin.SpaceGame.LeaderboardFunction", "Tailspin.SpaceGame.LeaderboardFunction\Tailspin.SpaceGame.LeaderboardFunction.csproj", "{5CA28DAB-1212-43F4-B349-DE8029FA7282}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +40,10 @@ Global
 		{EE18CEDD-9780-4AA8-BC34-DC11780AEFF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE18CEDD-9780-4AA8-BC34-DC11780AEFF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE18CEDD-9780-4AA8-BC34-DC11780AEFF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CA28DAB-1212-43F4-B349-DE8029FA7282}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CA28DAB-1212-43F4-B349-DE8029FA7282}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CA28DAB-1212-43F4-B349-DE8029FA7282}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CA28DAB-1212-43F4-B349-DE8029FA7282}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

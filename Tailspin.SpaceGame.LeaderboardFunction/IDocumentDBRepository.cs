@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using TailSpin.SpaceGame.Web.Models;
+using TailSpin.SpaceGame.LeaderboardFunction.Models;
 
-namespace TailSpin.SpaceGame.Web
+namespace TailSpin.SpaceGame.LeaderboardFunction
 {
     public interface IDocumentDBRepository
     {

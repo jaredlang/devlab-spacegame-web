@@ -11,87 +11,69 @@ namespace TailSpin.SpaceGame.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IDocumentDBRepository _dbRespository;
-        public HomeController(IDocumentDBRepository dbRepository)
+        private ILeaderboardServiceClient _leaderboardServiceClient;
+
+        public HomeController(ILeaderboardServiceClient leaderboardServiceClient)
         {
-            _dbRespository = dbRepository;
+            this._leaderboardServiceClient = leaderboardServiceClient;
         }
 
         public async Task<IActionResult> Index(
-            int page = 1, 
-            int pageSize = 10, 
+            int page = 1,
+            int pageSize = 10,
             string mode = "",
             string region = ""
             )
         {
             // Create the view model with initial values we already know.
-            var vm = new LeaderboardViewModel
-            {
-                Page = page,
-                PageSize = pageSize,
-                SelectedMode = mode,
-                SelectedRegion = region,
-
-                GameModes = new List<string>()
+            var vm = new LeaderboardViewModel();
+            vm.GameModes = new List<string>()
                 {
                     "Solo",
                     "Duo",
                     "Trio"
-                },
+                };
 
-                GameRegions = new List<string>()
+            vm.GameRegions = new List<string>()
                 {
                     "Milky Way",
                     "Andromeda",
                     "Pinwheel",
                     "NGC 1300",
                     "Messier 82",
-                }
-            };
+                };
+
+            vm.PageSize = pageSize;
 
             try
             {
-                // Fetch the total number of results in the background.
-                var countItemsTask = _dbRespository.CountScoresAsync(mode, region);
+                // Call the leaderboard service with the provided parameters.
+                LeaderboardResponse leaderboardResponse = await this._leaderboardServiceClient.GetLeaderboard(page, pageSize, mode, region);
 
-                // Fetch the scores that match the current filter.
-                IEnumerable<Score> scores = await _dbRespository.GetScoresAsync(mode, region, page, pageSize);
+                vm.Page = leaderboardResponse.Page;
+                vm.PageSize = leaderboardResponse.PageSize;
+                vm.Scores = leaderboardResponse.Scores;
+                vm.SelectedMode = leaderboardResponse.SelectedMode;
+                vm.SelectedRegion = leaderboardResponse.SelectedRegion;
+                vm.TotalResults = leaderboardResponse.TotalResults;
 
-                // Wait for the total count.
-                vm.TotalResults = await countItemsTask;
-
-                // Fetch the user profile for each score.
-                // This creates a list that's parallel with the scores collection.
-                var profiles = new List<Task<Profile>>();
-                foreach (var score in scores)
+                // Set previous and next hyperlinks.
+                if (page > 1)
                 {
-                    profiles.Add(_dbRespository.GetProfileAsync(score.ProfileId));
+                    vm.PrevLink = $"/?page={page - 1}&pageSize={pageSize}&mode={mode}&region={region}#leaderboard";
                 }
-                Task<Profile>.WaitAll(profiles.ToArray());
-
-                // Combine each score with its profile.
-                vm.Scores = scores.Zip(profiles, (score, profile) => new ScoreProfile { Score = score, Profile = profile.Result });
-
-                return View(vm);
+                if (vm.TotalResults > page * pageSize)
+                {
+                    vm.NextLink = $"/?page={page + 1}&pageSize={pageSize}&mode={mode}&region={region}#leaderboard";
+                }
             }
-            catch (Exception)
+            catch(Exception e)
             {
-                return View(vm);
+                vm.ErrorMessage = $"Unable to retrieve leaderboard: {e}";
+                Trace.TraceError(vm.ErrorMessage);
             }
-        }
 
-        [Route("/profile/{id}")]
-        public async Task<IActionResult> Profile(string id, string rank="")
-        {
-            try
-            {
-                // Fetch the user profile with the given identifier.
-                return View(new ProfileViewModel { Profile = await _dbRespository.GetProfileAsync(id), Rank = rank });
-            }
-            catch (Exception)
-            {
-                return RedirectToAction("/");
-            }
+            return View(vm);
         }
 
         public IActionResult Privacy()

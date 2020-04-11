@@ -7,10 +7,10 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
-using TailSpin.SpaceGame.Web;
-using TailSpin.SpaceGame.Web.Models;
+using TailSpin.SpaceGame.LeaderboardFunction;
+using TailSpin.SpaceGame.LeaderboardFunction.Models;
 
-namespace Tailspin.SpaceGame.Web
+namespace Tailspin.SpaceGame.LeaderboardFunction
 {
     public class RemoteDBRepository : IDocumentDBRepository
     {
@@ -121,4 +121,5 @@ namespace Tailspin.SpaceGame.Web
             return Task<int>.FromResult(count);
         }
     }
+
 }

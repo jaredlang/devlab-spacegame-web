@@ -265,8 +265,9 @@ stages:
                   Variables = $vars}
                 Update-VSTeamVariableGroup @methodParameters
 
-- stage: 'DeployToDev'
-  displayName: 'Deploy to the dev environment'
+
+- stage: 'DeployFunction'
+  displayName: 'Deploy the leaderboard function'
   dependsOn:
   - DBAVerificationScript
   - DBAVerificationApply  
@@ -276,6 +277,30 @@ stages:
       succeeded('DBAVerificationScript'),
       in(dependencies.DBAVerificationApply.result, 'Succeeded', 'Skipped')
     )
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-16.04'
+    environment: spike
+    variables:
+    - group: Release
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureFunctionApp@1
+            displayName: 'Azure Function App Deploy: leaderboard'
+            inputs: 
+              azureSubscription: 'devlab-spacegame-ARM'
+              appName: '$(LeaderboardAppName)'
+              appType: functionAppLinux
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/Tailspin.SpaceGame.LeaderboardFunction.zip'
+              runtimeStack: DOCKER|microsoft/azure-functions-dotnet-core2.0:2.0
+              startUpCommand: 'func azure functionapp publish $(functionAppName) --no-bundler'
+  
+- stage: 'DeployToDev'
+  displayName: 'Deploy to the dev environment'
+  dependsOn: DeployFunction
   jobs:
   - deployment: Deploy
     pool:
