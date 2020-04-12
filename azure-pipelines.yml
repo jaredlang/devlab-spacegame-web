@@ -420,7 +420,7 @@ stages:
 
 - stage: 'DeployToProduction'
   displayName: 'Deploy to the Production (pre-release slot) 
-  dependsOn: 'DeployToStaging'
+  dependsOn: DeployToStaging
   condition: succeeded('DeployToStaging')
   jobs: 
   - deployment: Deploy
