@@ -419,7 +419,7 @@ stages:
         testRunTitle: 'Load Tests'
 
 - stage: 'DeployToProduction'
-  displayName: 'Deploy to the Production (pre-release slot) 
+  displayName: 'Deploy to the Production (pre-release slot)'
   dependsOn: DeployToStaging
   condition: succeeded('DeployToStaging')
   jobs: 
