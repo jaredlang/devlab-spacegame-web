@@ -2,8 +2,6 @@
   "IsEncrypted": false,
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
-    "DBRepositoryType": "AzureSQL",
-    "DatabaseConnection": "Server=tcp:tailspin-lsg-sqlserver.database.windows.net,1433;Initial Catalog=tailspindatabase;Persist Security Info=False;User ID=azuresql;Password=V!rvsW1n$2020;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet"
   }
 }

@@ -21,7 +21,8 @@ namespace TailSpin.SpaceGame.LeaderboardFunction
             
             var configBuilder = new ConfigurationBuilder()
                   .SetFileProvider(new PhysicalFileProvider(actual_root))
-                  .AddJsonFile("local.settings.json", optional: false, reloadOnChange: true);
+                  //.AddJsonFile("local.settings.json", optional: false, reloadOnChange: true);
+                  .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
             var appSettingsConfig = configBuilder.Build();
 
