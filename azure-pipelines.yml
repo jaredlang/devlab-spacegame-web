@@ -314,6 +314,20 @@ stages:
               azureSubscription: '$(azureServiceConnection)'
               appName: '$(WebAppNameDev)'
               package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/Tailspin.SpaceGame.Web.zip'
+          - task: AzureAppServiceSettings@1
+            displayName: 'Update web app settings'
+            inputs:
+              azureSubscription: '$(azureServiceConnection)'
+              appName: $(WebAppNameDev)
+              resourceGroupName: $(ResourceGroupName)
+              appSettings: |
+                [
+                  {
+                    "name": "AppSettings:LeaderboardFunctionUrl",
+                    "value": "http://$(LeaderboardAppName).azurewebsites.net/api/LeaderboardFunction",
+                    "slotSetting": false
+                  }
+                ]
 
 - stage: 'DeployToTest'
   displayName: 'Deploy to the test environment'
@@ -339,6 +353,20 @@ stages:
               azureSubscription: '$(azureServiceConnection)'
               appName: '$(WebAppNameTest)'
               package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/Tailspin.SpaceGame.Web.zip'
+          - task: AzureAppServiceSettings@1
+            displayName: 'Update web app settings'
+            inputs:
+              azureSubscription: '$(azureServiceConnection)'
+              appName: $(WebAppNameTest)
+              resourceGroupName: $(ResourceGroupName)
+              appSettings: |
+                [
+                  {
+                    "name": "AppSettings:LeaderboardFunctionUrl",
+                    "value": "http://$(LeaderboardAppName).azurewebsites.net/api/LeaderboardFunction",
+                    "slotSetting": false
+                  }
+                ]
   - job: RunUITests
     displayName: 'Run UI tests'
     dependsOn: Deploy
@@ -387,6 +415,20 @@ stages:
               azureSubscription: '$(azureServiceConnection)'
               appName: '$(WebAppNameStaging)'
               package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/Tailspin.SpaceGame.Web.zip'  
+          - task: AzureAppServiceSettings@1
+            displayName: 'Update web app settings'
+            inputs:
+              azureSubscription: '$(azureServiceConnection)'
+              appName: $(WebAppNameStaging)
+              resourceGroupName: $(ResourceGroupName)
+              appSettings: |
+                [
+                  {
+                    "name": "AppSettings:LeaderboardFunctionUrl",
+                    "value": "http://$(LeaderboardAppName).azurewebsites.net/api/LeaderboardFunction",
+                    "slotSetting": false
+                  }
+                ]
   - job: RunLoadTests
     dependsOn: Deploy
     displayName: 'Run load tests'
@@ -445,3 +487,19 @@ stages:
               slotName: '$(WebAppNameProductionRC1Slot)'
               appName: '$(WebAppNameProduction)'
               package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/Tailspin.SpaceGame.Web.zip' 
+          - task: AzureAppServiceSettings@1
+            displayName: 'Update web app settings'
+            inputs:
+              azureSubscription: '$(azureServiceConnection)'
+              appName: $(WebAppNameProduction)
+              slotName: '$(WebAppNameProductionRC1Slot)'
+              resourceGroupName: $(ResourceGroupName)
+              appSettings: |
+                [
+                  {
+                    "name": "AppSettings:LeaderboardFunctionUrl",
+                    "value": "http://$(LeaderboardAppName).azurewebsites.net/api/LeaderboardFunction",
+                    "slotSetting": true
+                  }
+                ]
+
