@@ -18,25 +18,35 @@ namespace TailSpin.SpaceGame.LeaderboardFunction
                     ?? (Environment.GetEnvironmentVariable("HOME") == null
                         ? Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
                         : $"{Environment.GetEnvironmentVariable("HOME")}/site/wwwroot"); // azure_root
-            /*
+            
             var configBuilder = new ConfigurationBuilder()
                   .SetFileProvider(new PhysicalFileProvider(actual_root))
                   .AddJsonFile("local.settings.json", optional: false, reloadOnChange: true);
 
-            // if it is a local run, 
-            // if (actual_root.Equals(Environment.GetEnvironmentVariable("AzureWebJobsScriptRoot")))
-            if ("Development".Equals(Environment.GetEnvironmentVariable("AZURE_FUNCTIONS_ENVIRONMENT"), StringComparison.OrdinalIgnoreCase))
-            {
-                configBuilder.AddUserSecrets<Startup>();                    
-            }
-
             var appSettingsConfig = configBuilder.Build();
 
-            builder.Services.AddSingleton<IDocumentDBRepository>(new RemoteDBRepository(appSettingsConfig));
-            */
-            // 
+            if (appSettingsConfig["Values:DBRepositoryType"] == "AzureSQL")
+            {
+                /*
+                // if it is a local run, 
+                // if (actual_root.Equals(Environment.GetEnvironmentVariable("AzureWebJobsScriptRoot")))
+                if ("Development".Equals(Environment.GetEnvironmentVariable("AZURE_FUNCTIONS_ENVIRONMENT"), StringComparison.OrdinalIgnoreCase))
+                {
+                    configBuilder.AddUserSecrets<Startup>();
+                    appSettingsConfig = configBuilder.Build();
+                }
+                */
+
+                if (appSettingsConfig["Values:DatabaseConnection"] != null) 
+                {
+                    builder.Services.AddSingleton<IDocumentDBRepository>(new RemoteDBRepository(appSettingsConfig));
+                    return;
+                }
+            }
+
             builder.Services.AddSingleton<IDocumentDBRepository>(new LocalDocumentDBRepository(
                 Path.Combine(actual_root, @"SampleData/scores.json"), Path.Combine(actual_root, @"SampleData/profiles.json")));
+
         }
     }
 }

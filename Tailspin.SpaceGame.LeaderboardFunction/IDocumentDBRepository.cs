@@ -6,6 +6,8 @@ namespace TailSpin.SpaceGame.LeaderboardFunction
 {
     public interface IDocumentDBRepository
     {
+        string GetRepositoryType();
+
         /// <summary>
         /// Retrieves the item from the store with the given identifier.
         /// </summary>

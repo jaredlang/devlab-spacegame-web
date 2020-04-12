@@ -29,6 +29,7 @@ namespace TailSpin.SpaceGame.LeaderboardFunction
             ILogger log)
         {
             log.LogInformation("Leaderboard function processed a request.");
+            log.LogInformation("Repository Type: " + _dbRespository.GetRepositoryType());
 
             // Grab parameters from query string.
             string mode = req.Query["mode"];

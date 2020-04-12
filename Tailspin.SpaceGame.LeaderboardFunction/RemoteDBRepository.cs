@@ -16,7 +16,15 @@ namespace TailSpin.SpaceGame.LeaderboardFunction
         public RemoteDBRepository(IConfiguration config)
         {
             configuration = config;
-            connectionString = configuration.GetConnectionString("DefaultConnection");
+            // This works for webapp
+            //connectionString = configuration.GetConnectionString("DefaultConnection");
+            // This works for function app
+            connectionString = configuration["Values:DatabaseConnection"]; 
+        }
+
+        public string GetRepositoryType()
+        {
+            return "AzureSQL";
         }
 
         public Task<Profile> GetProfileAsync(string profileId)

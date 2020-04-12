@@ -22,6 +22,11 @@ namespace TailSpin.SpaceGame.LeaderboardFunction
             _profiles = JsonConvert.DeserializeObject<List<Profile>>(File.ReadAllText(profilesFileName));
         }
 
+        public string GetRepositoryType()
+        {
+            return "file";
+        }
+
         /// <summary>
         /// Retrieves the item from the store with the given identifier.
         /// </summary>
