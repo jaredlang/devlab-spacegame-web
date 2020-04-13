@@ -7,6 +7,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="TestData\profiles.json" />
+    <None Remove="TestData\scores.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="TestData\profiles.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="TestData\scores.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="coverlet.msbuild" Version="2.6.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -17,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Tailspin.SpaceGame.LeaderboardFunction\Tailspin.SpaceGame.LeaderboardFunction.csproj" />
+    <ProjectReference Include="..\Tailspin.SpaceGame.DBRepository\Tailspin.SpaceGame.DBRepository.csproj" />
   </ItemGroup>
 
 </Project>
