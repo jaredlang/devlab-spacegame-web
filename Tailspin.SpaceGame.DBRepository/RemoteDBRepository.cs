@@ -1,25 +1,25 @@
 ﻿using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
-using TailSpin.SpaceGame.LeaderboardFunction.Models;
+using TailSpin.SpaceGame.DBRepository.Models;
 
-namespace TailSpin.SpaceGame.LeaderboardFunction
+namespace TailSpin.SpaceGame.DBRepository
 {
     public class RemoteDBRepository : IDocumentDBRepository
     {
-        private readonly IConfiguration configuration;
         private readonly string connectionString;
 
-        public RemoteDBRepository(IConfiguration config)
+        public RemoteDBRepository(string connectionString)
         {
-            configuration = config;
+            /* 4/12 - 
+             * remove the configuration and init with connectionString
+             */
             // This works for webapp
             //connectionString = configuration.GetConnectionString("DefaultConnection");
-            // This works for function app
-            connectionString = configuration["Values:DatabaseConnection"]; 
+            // 4/11 - This works for function app
+            this.connectionString = connectionString; 
         }
 
         public string GetRepositoryType()

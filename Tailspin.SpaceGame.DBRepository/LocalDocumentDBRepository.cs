@@ -5,9 +5,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using TailSpin.SpaceGame.LeaderboardFunction.Models;
+using TailSpin.SpaceGame.DBRepository.Models;
 
-namespace TailSpin.SpaceGame.LeaderboardFunction
+namespace TailSpin.SpaceGame.DBRepository
 {
     public class LocalDocumentDBRepository : IDocumentDBRepository
     {
