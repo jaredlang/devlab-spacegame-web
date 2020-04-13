@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace TailSpin.SpaceGame.LeaderboardFunction.Models
 {
@@ -11,6 +12,10 @@ namespace TailSpin.SpaceGame.LeaderboardFunction.Models
         // The URL of the player's avatar image.
         [JsonProperty(PropertyName = "avatarUrl")]
         public string AvatarUrl { get; set; }
+
+        // The player's birthday
+        [JsonProperty(PropertyName = "birthdate")]
+        public DateTime Birthdate { get; set; }
 
         // The achievements the player earned.
         [JsonProperty(PropertyName = "achievements")]
