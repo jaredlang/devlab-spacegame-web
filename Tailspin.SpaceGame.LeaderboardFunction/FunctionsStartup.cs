@@ -5,6 +5,7 @@ using Microsoft.Extensions.FileProviders;
 using System;
 using System.IO;
 using System.Reflection;
+using TailSpin.SpaceGame.DBRepository; 
 
 [assembly: FunctionsStartup(typeof(TailSpin.SpaceGame.LeaderboardFunction.Startup))]
 namespace TailSpin.SpaceGame.LeaderboardFunction
@@ -40,13 +41,14 @@ namespace TailSpin.SpaceGame.LeaderboardFunction
 
                 if (appSettingsConfig["Values:DatabaseConnection"] != null) 
                 {
-                    builder.Services.AddSingleton<IDocumentDBRepository>(new RemoteDBRepository(appSettingsConfig));
+                    string connectionString = appSettingsConfig["Values:DatabaseConnection"];
+                    builder.Services.AddSingleton<IDocumentDBRepository>(new RemoteDBRepository(connectionString));
                     return;
                 }
             }
 
             builder.Services.AddSingleton<IDocumentDBRepository>(new LocalDocumentDBRepository(
-                Path.Combine(actual_root, @"SampleData/scores.json"), Path.Combine(actual_root, @"SampleData/profiles.json")));
+                Path.Combine(actual_root, @"FileData/scores.json"), Path.Combine(actual_root, @"FileData/profiles.json")));
 
         }
     }

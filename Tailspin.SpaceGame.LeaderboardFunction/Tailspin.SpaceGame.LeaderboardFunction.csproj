@@ -5,16 +5,16 @@
     <UserSecretsId>1591c821-58f0-4a9a-91c2-7e3c20c4e766</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="SampleData\profiles.json" />
-    <None Remove="SampleData\scores.json" />
+    <None Remove="FileData\profiles.json" />
+    <None Remove="FileData\scores.json" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="SampleData\profiles.json">
+    <Content Include="FileData\profiles.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="SampleData\scores.json">
+    <Content Include="FileData\scores.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -22,9 +22,11 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="3.0.0" />
+
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.3" />
-	<PackageReference Include="Microsoft.Data.SqlClient" Version="1.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tailspin.SpaceGame.DBRepository\Tailspin.SpaceGame.DBRepository.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

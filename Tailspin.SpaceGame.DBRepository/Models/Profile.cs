@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace TailSpin.SpaceGame.LeaderboardFunction.Models
+namespace TailSpin.SpaceGame.DBRepository.Models
 {
     public class Profile : Model
     {

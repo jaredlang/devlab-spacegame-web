@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace TailSpin.SpaceGame.LeaderboardFunction.Models
+namespace TailSpin.SpaceGame.DBRepository.Models
 {
     /// <summary>
     /// Base class for data models.

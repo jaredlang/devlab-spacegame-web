@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using TailSpin.SpaceGame.LeaderboardFunction.Models;
+using TailSpin.SpaceGame.DBRepository.Models;
 
-namespace TailSpin.SpaceGame.LeaderboardFunction
+namespace TailSpin.SpaceGame.DBRepository
 {
     public interface IDocumentDBRepository
     {

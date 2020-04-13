@@ -5,8 +5,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using TailSpin.SpaceGame.LeaderboardFunction;
-using TailSpin.SpaceGame.LeaderboardFunction.Models;
+using TailSpin.SpaceGame.DBRepository;
+using TailSpin.SpaceGame.DBRepository.Models;
 
 namespace Tests
 {
@@ -18,8 +18,8 @@ namespace Tests
         public void Setup()
         {
             _scoreRepository = new LocalDocumentDBRepository(
-                "SampleData/scores.json",
-                "SampleData/profiles.json"
+                "TestData/scores.json",
+                "TestData/profiles.json"
                 ); 
         }
 
