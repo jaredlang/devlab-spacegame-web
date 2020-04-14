@@ -1,0 +1,59 @@
+stages:
+- stage: DBAVerificationApply
+  displayName: 'Apply database schema changes'
+  dependsOn: DBAVerificationScript
+  variables:
+  - group: 'Release'
+  condition: |
+    and
+    (
+      succeeded('DBAVerificationScript'), 
+      eq(variables['schemaChanged'], True)
+    )
+  jobs:
+  - deployment: DBAVerificationApply
+    pool:
+      vmImage: 'windows-2019'
+    environment: 'dbaverificationapply'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: dropDacpac
+            patterns: '**/*'
+          - task: SqlAzureDacpacDeployment@1
+            displayName: 'Deploy SQL schema'
+            inputs:
+              azureSubscription: '$(azureServiceConnection)'
+              authenticationType: 'server'
+              serverName: '$(SQLServerName).database.windows.net'
+              databaseName: '$(SQLDatabaseName)'
+              sqlUsername: '$(SQLAdminUserName)'
+              sqlPassword: '$(SQLAdminPassword)'
+              deployType: 'DacpacTask'
+              deploymentAction: 'Publish'
+              dacpacFile: '$(Pipeline.Workspace)/dropDacpac/Tailspin.SpaceGame.Database/bin/Debug/Tailspin.SpaceGame.Database.dacpac'
+              ipDetectionMethod: 'AutoDetect'
+          - task: PowerShell@2
+            displayName: 'Remove "schemaChanged" pipeline variable'
+            inputs:
+              targetType: 'inline'
+              script: | 
+                Install-Module VSTeam -Scope CurrentUser -Force
+                Set-VSTeamAccount –Account $(DevOpsOrg) -PersonalAccessToken $(PAT)
+                $methodParameters = @{
+                  ProjectName = "$(System.TeamProject)"
+                  Name = "Release"}
+                $vg = Get-VSTeamVariableGroup  @methodParameters 
+                $vars = @{}
+                $vg.variables | Get-Member -MemberType *Property | %{$vars.($_.Name) = $vg.variables.($_.Name)}
+                $vars.Remove("schemaChanged")
+                $methodParameters = @{
+                  id = $vg.id
+                  ProjectName = "$(System.TeamProject)"
+                  Name = "Release"
+                  Description = ""
+                  Type = "Vsts"
+                  Variables = $vars}
+                Update-VSTeamVariableGroup @methodParameters

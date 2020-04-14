@@ -1,0 +1,35 @@
+stages:
+- stage: 'DeployFunction'
+  displayName: 'Deploy the leaderboard function'
+  dependsOn:
+  - DBAVerificationScript
+  - DBAVerificationApply  
+  condition: |
+    and 
+    (
+      succeeded('DBAVerificationScript'),
+      in(dependencies.DBAVerificationApply.result, 'Succeeded', 'Skipped')
+    )
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-16.04'
+    environment: spike
+    variables:
+    - group: Release
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop          
+          - task: AzureFunctionApp@1
+            displayName: 'Azure Function App Deploy: leaderboard'
+            inputs: 
+              azureSubscription: '$(azureServiceConnection)'
+              appName: '$(LeaderboardAppName)'
+              appType: functionAppLinux
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/Tailspin.SpaceGame.LeaderboardFunction.zip'
+              runtimeStack: DOCKER|microsoft/azure-functions-dotnet-core2.0:2.0
+              startUpCommand: 'func azure functionapp publish $(functionAppName) --no-bundler'
+  
