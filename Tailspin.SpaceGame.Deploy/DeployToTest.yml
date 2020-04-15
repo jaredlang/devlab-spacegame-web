@@ -7,34 +7,9 @@ stages:
   variables:
   - group: Release
   jobs:
-  - deployment: DeployWebApp
-    pool:
-      vmImage: 'ubuntu-16.04'
-    environment: test
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - download: current
-            artifact: drop
-          - task: AzureWebApp@1
-            displayName: 'Azure App Service Deploy: website'
-            inputs:
-              azureSubscription: '$(azureServiceConnection)'
-              appName: '$(WebAppNameTest)'
-              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/Tailspin.SpaceGame.Web.zip'
-          - task: AzureAppServiceSettings@1
-            displayName: 'Update web app settings'
-            inputs:
-              azureSubscription: '$(azureServiceConnection)'
-              appName: $(WebAppNameTest)
-              resourceGroupName: $(ResourceGroupName)
-              appSettings: |
-                [
-                  {
-                    "name": "AppSettings:LeaderboardFunctionUrl",
-                    "value": "http://$(LeaderboardAppName).azurewebsites.net/api/LeaderboardFunction",
-                    "slotSetting": false
-                  }
-                ]
+  - template: DeployWebApp.yml
+    parameters: 
+      envName: 'test'
+      webAppName: '$(WebAppNameTest)'
+      leaderboardAppName: '$(LeaderboardAppName)'
   - template: RunUITests.yml
