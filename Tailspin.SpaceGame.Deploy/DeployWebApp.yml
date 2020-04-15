@@ -19,6 +19,19 @@ jobs:
     runOnce:
       deploy:
         steps:
+        - bash: | 
+            if [ -z "$WEB_APP_NAME" ]; then
+              echo echo "##vso[task.logissue type=error;]Missing template parameter \"webAppName\""
+              echo "##vso[task.complete result=Failed;]"
+            fi
+            if [ -z "$FUNC_APP_NAME" ]; then
+              echo echo "##vso[task.logissue type=error;]Missing template parameter \"leaderboardAppName\""
+              echo "##vso[task.complete result=Failed;]"
+            fi
+          env:
+            WEB_APP_NAME: ${{ parameters.webAppName }}
+            FUNC_APP_NAME: ${{ parameters.leaderboardAppName }}
+          displayName: 'Check for the DeployWebApp required parameters'
         - download: current
           artifact: drop
         - task: AzureWebApp@1
