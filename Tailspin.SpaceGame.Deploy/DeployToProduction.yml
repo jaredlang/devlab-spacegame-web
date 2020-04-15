@@ -4,7 +4,7 @@ stages:
   dependsOn: DeployToStaging
   condition: succeeded('DeployToStaging')
   jobs: 
-  - deployment: Deploy
+  - deployment: DeployWebApp
     pool: 
       vmImage: 'ubuntu-16.04'
     environment: production

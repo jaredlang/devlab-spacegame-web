@@ -6,7 +6,7 @@ stages:
   variables:
   - group: Release
   jobs:
-  - deployment: Deploy
+  - deployment: DeployWebApp
     pool:
       vmImage: 'ubuntu-16.04'
     environment: staging
