@@ -1,7 +1,7 @@
 jobs:
 - job: RunUITests
   displayName: 'Run UI tests'
-  dependsOn: Deploy
+  dependsOn: DeployWebApp
   pool:
     vmImage: 'windows-2019'
   steps: 

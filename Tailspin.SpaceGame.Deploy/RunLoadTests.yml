@@ -1,6 +1,6 @@
 jobs:
 - job: RunLoadTests
-  dependsOn: Deploy
+  dependsOn: DeployWebApp
   displayName: 'Run load tests'
   pool:
     vmImage: 'ubuntu-16.04'
@@ -12,10 +12,10 @@ jobs:
     displayName: 'List the files under $(System.DefaultWorkingDirectory)'
   - script: cat $(perfTestDirectory)/LoadTest.jmx
     displayName: 'Display the Load test Settings'
-   - script: |
+  - script: |
       wget -c ftp.ps.pl/pub/apache/jmeter/binaries/apache-jmeter-$(jmeterVersion).tgz
       tar -xf apache-jmeter-$(jmeterVersion).tgz
-      displayName: 'Install Apache JMeter'
+    displayName: 'Install Apache JMeter'
   - script: apache-jmeter-$(jmeterVersion)/bin/./jmeter -n -t $(perfTestDirectory)/LoadTest.jmx -o Results.xml -Jhostname=$(HostNameStaging)
     displayName: 'Run Load tests'
   - script: ls -l Results.xml
@@ -30,4 +30,3 @@ jobs:
       testResultsFormat: JUnit
       testResultsFiles: JUnit.xml
       testRunTitle: 'Load Tests'
-	  
