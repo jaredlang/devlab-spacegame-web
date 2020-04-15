@@ -1,3 +1,11 @@
+parameters: 
+- name: envName
+  default: 'spike'
+  type: string
+- name: functionName
+  default: ''
+  type: string
+
 stages:
 - stage: 'DeployFunction'
   displayName: 'Deploy the leaderboard function'
@@ -14,20 +22,28 @@ stages:
   - deployment: Deploy
     pool:
       vmImage: 'ubuntu-16.04'
-    environment: spike
+    environment: ${{ parameters.envName }}
     variables:
     - group: Release
     strategy:
       runOnce:
         deploy:
           steps:
+          - bash: | 
+              if [ -z "$FUNC_APP_NAME" ]; then
+                echo echo "##vso[task.logissue type=error;]Missing template parameter \"functionName\""
+                echo "##vso[task.complete result=Failed;]"
+              fi
+            env:
+              FUNC_APP_NAME: ${{ parameters.functionName }}
+            displayName: 'Check for the DeployFunction required parameters'          
           - download: current
             artifact: drop          
           - task: AzureFunctionApp@1
-            displayName: 'Azure Function App Deploy: leaderboard'
+            displayName: 'Azure Function App Deploy: ${{ parameters.functionName }}'
             inputs: 
               azureSubscription: '$(azureServiceConnection)'
-              appName: '$(LeaderboardAppName)'
+              appName: ${{ parameters.functionName }}
               appType: functionAppLinux
               package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/Tailspin.SpaceGame.LeaderboardFunction.zip'
               runtimeStack: DOCKER|microsoft/azure-functions-dotnet-core2.0:2.0

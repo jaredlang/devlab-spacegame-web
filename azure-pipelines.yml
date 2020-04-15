@@ -21,6 +21,9 @@ stages:
 - template: Tailspin.SpaceGame.Deploy/DBAVerificationScript.yml
 - template: Tailspin.SpaceGame.Deploy/DBAVerificationApply.yml
 - template: Tailspin.SpaceGame.Deploy/DeployFunction.yml
+  parameters:
+    envName: 'spike'
+    functionName: '$(LeaderboardAppName)'
 - template: Tailspin.SpaceGame.Deploy/DeployToDev.yml
 - template: Tailspin.SpaceGame.Deploy/DeployToTest.yml
 - template: Tailspin.SpaceGame.Deploy/DeployToStaging.yml
