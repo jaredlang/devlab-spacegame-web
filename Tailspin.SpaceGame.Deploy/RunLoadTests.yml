@@ -30,4 +30,3 @@ jobs:
       testResultsFormat: JUnit
       testResultsFiles: JUnit.xml
       testRunTitle: 'Load Tests'
-	  
