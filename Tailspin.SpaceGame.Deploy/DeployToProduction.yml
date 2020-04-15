@@ -9,7 +9,7 @@ stages:
       vmImage: 'ubuntu-16.04'
     environment: production
     variables:
-    - group: 'Release'
+    - group: Release
     strategy:
       runOnce:
         deploy: 
