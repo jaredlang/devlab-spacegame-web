@@ -5,3 +5,7 @@ stages:
   condition: succeeded('DeployFunction')
   jobs:
   - template: DeployWebApp.yml
+    parameters:
+      envName: 'dev'
+      webAppName: '$(WebAppNameDev)'
+      leaderboardAppName: '$(LeaderboardAppName)'
