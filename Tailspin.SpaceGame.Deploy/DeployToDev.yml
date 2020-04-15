@@ -3,6 +3,8 @@ stages:
   displayName: 'Deploy to the dev environment'
   dependsOn: DeployFunction
   condition: succeeded('DeployFunction')
+  variables:
+  - group: Release  
   jobs:
   - template: DeployWebApp.yml
     parameters:
