@@ -9,7 +9,7 @@ stages:
       vmImage: 'ubuntu-16.04'
     environment: production
     variables:
-    - group: 'Release'
+    - group: Release
     strategy:
       runOnce:
         deploy: 
@@ -20,11 +20,11 @@ stages:
             displayName: 'Azure App Service Deploy: website'
             inputs: 
               azureSubscription: '$(azureServiceConnection)'
-              deployToSlotOrASE: 'true'
-              resourceGroupName: '$(ResourceGroupName)'
-              slotName: '$(WebAppNameProductionRC1Slot)'
               appName: '$(WebAppNameProduction)'
               package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/Tailspin.SpaceGame.Web.zip' 
+              resourceGroupName: '$(ResourceGroupName)'
+              deployToSlotOrASE: 'true'
+              slotName: '$(WebAppNameProductionRC1Slot)'
           - task: AzureAppServiceSettings@1
             displayName: 'Update web app settings'
             inputs:
